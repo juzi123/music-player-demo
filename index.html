@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>music player</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div id="app">
+        <audio :src="getCurrentSongSrc" controls autoplay @ended="handleEnded"></audio>
+        <ul>
+            <li :class="{active: index === currentIndex}" v-for="(item, index) in musicData" :key="item.id"
+                @click="handleClick(index)">
+                <h2>{{item.id}}-歌名：{{item.name}}</h2>
+                <p>{{item.author}}</p>
+            </li>
+        </ul>
+        <button @click="handleNext">下一首</button>
+    </div>
+</body>
+<script src="./vue.js"></script>
+<script>
+    const musicData = [{
+        id: 1,
+        name: 'Legends Never Die',
+        author: '英雄联盟',
+        songSrc: './static/Against the Current,英雄联盟 - Legends Never Die.mp3'
+    }, {
+        id: 2,
+        name: '修炼爱情',
+        author: '林俊杰',
+        songSrc: './static/林俊杰 - 修炼爱情.mp3'
+    }, {
+        id: 3,
+        name: '僕らの手には何もないけど、',
+        author: 'RAM WIRE',
+        songSrc: './static/RAM WIRE - 僕らの手には何もないけど、.mp3'
+    }, ]
+    new Vue({
+        el: '#app',
+        data: {
+            musicData,
+            currentIndex: 0
+        },
+        computed: {
+            getCurrentSongSrc() {
+                return musicData[this.currentIndex].songSrc
+            }
+        },
+        methods: {
+            handleClick(index) {
+                this.currentIndex = index;
+            },
+            handleEnded() {
+                this.handleNext()
+            },
+            handleNext() {
+                this.currentIndex++;
+                if (this.currentIndex === this.musicData.length) {
+                    this.currentIndex = 0;
+                }
+            }
+
+        }
+    })
+</script>
+
+</html>
